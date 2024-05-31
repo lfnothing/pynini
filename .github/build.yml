@@ -1,0 +1,53 @@
+name: Build Macos Wheels
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version"
+        required: true
+
+jobs:
+  macOS-latest-arm64:
+    runs-on: macos-latest
+
+    steps:
+      - name: Clone
+        id: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Dependencies
+        id: depends
+        continue-on-error: true
+        run: |
+          brew update
+          brew install bazel
+
+      - name: Build
+        id: build
+        run: |
+          bazel build //:all
+
+  macOS-latest-x64:
+    runs-on: macos-latest
+
+    steps:
+      - name: Clone
+        id: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Dependencies
+        id: depends
+        continue-on-error: true
+        run: |
+          brew update
+          brew install bazel
+
+      - name: Build
+        id: build
+        run: |
+          bazel build //:all
